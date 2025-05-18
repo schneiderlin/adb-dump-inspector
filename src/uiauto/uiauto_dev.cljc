@@ -23,7 +23,8 @@
 
 (defalias user-rect [{:keys [bounds
                              active?
-                             id]}
+                             id
+                             path]}
                      content] 
   (if bounds
     (let [{:keys [left top width height]} (parse-bound bounds)]
@@ -31,6 +32,9 @@
              :on {:click
                   [[:event/stop-propagation]
                    [:debug/print "click" id]
+                   [:store/update-in [:active-ids]
+                    (fn [active-ids]
+                      (clojure.set/union active-ids (into #{} (conj path id))))]
                    [:store/assoc-in [:active-id] id]]}
              :style (if active?
                       {:position "fixed"
@@ -119,9 +123,6 @@
                    :on {:click [[:clipboard/copy v]
                                 [:toast/show :event/target "Copied"]]}})]])])
 
-(defn zip-children [z]
-  (take-while identity (iterate zip/right (zip/down z))))
-
 (defn subtree [{:keys [active-ids active-id]
                 :as state} path node]
   (let [{:keys [attrs content id]} node
@@ -171,13 +172,14 @@
 (def example-data
   (xml->data example-xml))
 
-(defn tree-of-rects [xml active-id] 
+(defn tree-of-rects [xml active-id path] 
   (let [{:keys [attrs content id]} xml] 
     [::user-rect (assoc attrs 
                         :active? (= (:id xml) active-id)
                         :id id
-                        :active-id active-id)
-     (map #(tree-of-rects % active-id) content)]))
+                        :active-id active-id
+                        :path path)
+     (map #(tree-of-rects % active-id (conj path id)) content)]))
 
 (comment
   (tree-of-rects {:attr {:id :root}
@@ -188,7 +190,8 @@
                             {:attr {:id :root}
                              :id :2
                              :content []}]}
-                 :1)
+                 :1
+                 [])
   :rcf)
 
 (defn main [state]
@@ -220,7 +223,7 @@
                     :background-image "url('/example.png')"
                     :margin-left "auto"
                     :margin-right "auto"}}
-      (tree-of-rects xml active-id)]
+      (tree-of-rects xml active-id [])]
      ;; 属性
      (ui-attrs (:current-attrs state))
      ;; 树

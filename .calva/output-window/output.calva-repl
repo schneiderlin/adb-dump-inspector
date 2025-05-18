@@ -1,0 +1,107 @@
+; This is the Calva REPL Window.
+; It's just a file, really, with some special treatment from Calva.
+; Use it as a REPL input prompt if you like. (When the REPL is connected.)
+; TIPS: The keyboard shortcut `ctrl+alt+o r` shows and focuses this window
+; Please see https://calva.io/repl-window/ for more info.
+; Happy coding! ♥️
+
+; TIPS: As with any Clojure file when the REPL is connected:
+; - `alt+enter` evaluates the current top level form.
+; - `ctrl+enter` evaluates the current form.
+; Special for this file:
+; - `alt+up` and `alt+down` traverse up and down the REPL command history
+;    when the cursor is after the last contents at the prompt
+; 
+; See also the Calva Inspector: https://calva.io/inspector/
+
+PLEASE NOTE
+We will update the default location of this file.
+The new default location will be
+  "<projectRootPath>/.calva/repl.calva-repl"
+For now the legacy path is used by default.
+To give yourself a smooth transition, you can opt in
+to the change, by configuring this setting as false:
+  "calva.useLegacyReplWindowPath"
+and then add "**/.calva/repl.calva-repl" to your ".gitignore" file.
+
+
+This file is configured as the output destination for all REPL output.
+You can configure this with the setting:
+  "calva.outputDestinations"
+
+
+; Jacking in...
+; Connecting using "shadow-cljs" project type.
+; You can make Calva auto-select this.
+;   - See https://calva.io/connect-sequences/
+; 
+
+; Starting Jack-in: pushd c:\Users\zihao\Desktop\workspace\opensource\adb-dump-inspector & npx shadow-cljs -d cider/cider-nrepl:0.55.4 watch :app & popd
+; Using host:port localhost:54594 ...
+; Hooking up nREPL sessions ...
+; Connected session: clj
+; Evaluating code from settings: 'calva.autoEvaluateCode.onConnect.clj'
+nil
+clj꞉shadow.user꞉> 
+; Creating cljs repl session...
+; Connecting cljs repl: shadow-cljs...
+; [:browser-repl] Configuring build.
+; [:browser-repl] Compiling ...
+; [:browser-repl] Build completed. (118 files, 117 compiled, 0 warnings, 4.69s)
+; Connected session: cljs, repl: :browser-repl
+; TIPS: You can choose which REPL to use (clj or cljs):
+;    *Calva: Toggle REPL connection*
+;    (There is a button in the status bar for this)
+; Evaluating code from settings: 'calva.autoEvaluateCode.onConnect.cljs'
+nil
+"Please see https://calva.io/output/#about-stdout-in-the-repl-window
+about why stdout printed to this file is prepended with `;` to be line comments."
+cljs꞉user꞉> 
+; Jack-in done.
+cljs꞉user꞉> 
+; [:app] Compiling ...
+; [:app] Build completed. (140 files, 2 compiled, 0 warnings, 0.10s)
+; [:app] Compiling ...
+; [:app] Build completed. (140 files, 2 compiled, 0 warnings, 0.09s)
+; [:app] Compiling ...
+; [:app] Build completed. (140 files, 2 compiled, 0 warnings, 0.09s)
+; [:app] Compiling ...
+; [:app] Build completed. (140 files, 2 compiled, 0 warnings, 0.09s)
+; [:app] Compiling ...
+; [:app] Build completed. (140 files, 2 compiled, 1 warnings, 0.08s)
+; 
+; ------ WARNING #1 - :fn-arity --------------------------------------------------
+;  File: C:\Users\zihao\Desktop\workspace\opensource\adb-dump-inspector\src\uiauto\uiauto_dev.cljc:225:7
+; --------------------------------------------------------------------------------
+;  222 |                     :background-image "url('/example.png')"
+;  223 |                     :margin-left "auto"
+;  224 |                     :margin-right "auto"}}
+;  225 |       (tree-of-rects xml active-id)]
+; -------------^------------------------------------------------------------------
+;  Wrong number of args (2) passed to uiauto.uiauto-dev/tree-of-rects
+; --------------------------------------------------------------------------------
+;  226 |      ;; 属性
+;  227 |      (ui-attrs (:current-attrs state))
+;  228 |      ;; 树
+;  229 |      tree]))
+; --------------------------------------------------------------------------------
+; [:app] Compiling ...
+; [:app] Build completed. (140 files, 2 compiled, 1 warnings, 0.11s)
+; 
+; ------ WARNING #1 - :fn-arity --------------------------------------------------
+;  File: C:\Users\zihao\Desktop\workspace\opensource\adb-dump-inspector\src\uiauto\uiauto_dev.cljc:226:7
+; --------------------------------------------------------------------------------
+;  223 |                     :background-image "url('/example.png')"
+;  224 |                     :margin-left "auto"
+;  225 |                     :margin-right "auto"}}
+;  226 |       (tree-of-rects xml active-id)]
+; -------------^------------------------------------------------------------------
+;  Wrong number of args (2) passed to uiauto.uiauto-dev/tree-of-rects
+; --------------------------------------------------------------------------------
+;  227 |      ;; 属性
+;  228 |      (ui-attrs (:current-attrs state))
+;  229 |      ;; 树
+;  230 |      tree]))
+; --------------------------------------------------------------------------------
+; [:app] Compiling ...
+; [:app] Build completed. (140 files, 2 compiled, 0 warnings, 0.08s)
