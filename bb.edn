@@ -1,0 +1,2 @@
+{:tasks {tw (shell "npx @tailwindcss/cli -i ./public/input.css -o ./public/output.css --watch")
+         dev (shell "npx shadow-cljs watch app")}}

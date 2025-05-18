@@ -32,6 +32,8 @@
              :on {:click
                   [[:event/stop-propagation]
                    [:debug/print "click" id]
+                   [:store/assoc-in [:active-ids] (into #{} path)]
+                   [:store/assoc-in [:active-id] id]
                    [:store/update-in [:expand-ids]
                     (fn [expand-ids]
                       (clojure.set/union expand-ids (into #{} (conj path id))))]
@@ -123,22 +125,29 @@
                    :on {:click [[:clipboard/copy v]
                                 [:toast/show :event/target "Copied"]]}})]])])
 
-(defn subtree [{:keys [expand-ids active-id]
+(defn subtree [{:keys [expand-ids active-ids active-id]
                 :as state} path node]
   (let [{:keys [attrs content id]} node
         {:keys [class]} attrs
-        expand? (get expand-ids id)]
+        expand? (get expand-ids id)
+        active-parent? (get active-ids id)
+        active? (= active-id id)]
     [:div
      ;; current node
      [:div {:class ["flex" "hover:bg-indigo-400"]}
       (arrow-icon {:class ["w-4" "h-4" (when (not expand?) "rotate-270")]
-                   :on {:click [[:debug/print id] 
+                   :on {:click [[:debug/print id]
+                                [:store/assoc-in [:active-ids] (into #{} path)]
+                                [:store/assoc-in [:active-id] id]
                                 [:store/update-in [:expand-ids]
                                  (fn [expand-ids] 
                                    (if expand?
                                      (clojure.set/difference expand-ids #{id}) 
                                      (clojure.set/union expand-ids (into #{} (conj path id)))))]]}})
-      [:p {:on {:click [[:store/assoc-in [:current-attrs] attrs]
+      [:p {:class [(when active-parent? "bg-gray-200")
+                   (when active? "bg-gray-400")
+                   "hover:bg-inherit"]
+           :on {:click [[:store/assoc-in [:current-attrs] attrs]
                         [:debug/print "set-active" id]
                         [:store/assoc-in [:active-id] id]]}}
        class]]
@@ -198,6 +207,7 @@
   (let [xml (:xml state)
         tree (subtree state [] xml)
         active-id (:active-id state)]
+    (println "active-ids" (:active-ids state))
     [:div {:id "main"
            :class ["flex" "h-full" "w-full" "gap-4" "p-4"]}
      ;; 弹窗
