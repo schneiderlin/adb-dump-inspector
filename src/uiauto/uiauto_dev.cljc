@@ -32,9 +32,9 @@
              :on {:click
                   [[:event/stop-propagation]
                    [:debug/print "click" id]
-                   [:store/update-in [:active-ids]
-                    (fn [active-ids]
-                      (clojure.set/union active-ids (into #{} (conj path id))))]
+                   [:store/update-in [:expand-ids]
+                    (fn [expand-ids]
+                      (clojure.set/union expand-ids (into #{} (conj path id))))]
                    [:store/assoc-in [:active-id] id]]}
              :style (if active?
                       {:position "fixed"
@@ -123,21 +123,21 @@
                    :on {:click [[:clipboard/copy v]
                                 [:toast/show :event/target "Copied"]]}})]])])
 
-(defn subtree [{:keys [active-ids active-id]
+(defn subtree [{:keys [expand-ids active-id]
                 :as state} path node]
   (let [{:keys [attrs content id]} node
         {:keys [class]} attrs
-        expand? (get active-ids id)]
+        expand? (get expand-ids id)]
     [:div
      ;; current node
      [:div {:class ["flex" "hover:bg-indigo-400"]}
       (arrow-icon {:class ["w-4" "h-4" (when (not expand?) "rotate-270")]
                    :on {:click [[:debug/print id] 
-                                [:store/update-in [:active-ids]
-                                 (fn [active-ids] 
+                                [:store/update-in [:expand-ids]
+                                 (fn [expand-ids] 
                                    (if expand?
-                                     (clojure.set/difference active-ids #{id}) 
-                                     (clojure.set/union active-ids (into #{} (conj path id)))))]]}})
+                                     (clojure.set/difference expand-ids #{id}) 
+                                     (clojure.set/union expand-ids (into #{} (conj path id)))))]]}})
       [:p {:on {:click [[:store/assoc-in [:current-attrs] attrs]
                         [:debug/print "set-active" id]
                         [:store/assoc-in [:active-id] id]]}}
