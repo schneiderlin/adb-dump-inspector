@@ -24,13 +24,16 @@
 (defalias user-rect [{:keys [bounds
                              active?
                              id
-                             path]}
+                             path]
+                      :as attrs}
                      content] 
   (if bounds
-    (let [{:keys [left top width height]} (parse-bound bounds)]
+    (let [{:keys [left top width height]} (parse-bound bounds)
+          xml-attrs (dissoc attrs :active? :id :path)]
       [:div {:id id
              :on {:click
                   [[:event/stop-propagation]
+                   [:store/assoc-in [:current-attrs] xml-attrs]
                    [:debug/print "click" id]
                    [:store/assoc-in [:active-ids] (into #{} path)]
                    [:store/assoc-in [:active-id] id]
@@ -184,9 +187,8 @@
 (defn tree-of-rects [xml active-id path] 
   (let [{:keys [attrs content id]} xml] 
     [::user-rect (assoc attrs 
-                        :active? (= (:id xml) active-id)
+                        :active? (= id active-id)
                         :id id
-                        :active-id active-id
                         :path path)
      (map #(tree-of-rects % active-id (conj path id)) content)]))
 
